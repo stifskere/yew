@@ -54,8 +54,12 @@ where
     /// Registers the worker.
     pub fn register(&self)
     where
-        <R::Scope as ReactorScoped>::Input: Serialize + for<'de> Deserialize<'de>,
-        <R::Scope as ReactorScoped>::Output: Serialize + for<'de> Deserialize<'de>,
+        R: Reactor<
+            Scope: ReactorScoped<
+                Input: Serialize + for<'de> Deserialize<'de>,
+                Output: Serialize + for<'de> Deserialize<'de>,
+            >,
+        >,
     {
         self.inner.register()
     }

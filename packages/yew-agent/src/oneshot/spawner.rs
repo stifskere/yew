@@ -1,3 +1,5 @@
+use std::future::Future;
+
 use serde::de::Deserialize;
 use serde::ser::Serialize;
 
@@ -65,8 +67,8 @@ where
     /// Spawns a Oneshot Worker.
     pub fn spawn(mut self, path: &str) -> OneshotBridge<N>
     where
-        N::Input: Serialize + for<'de> Deserialize<'de>,
-        N::Output: Serialize + for<'de> Deserialize<'de>,
+        N: Oneshot<Input: Serialize + for<'de> Deserialize<'de>>
+            + Future<Output: Serialize + for<'de> Deserialize<'de>>,
     {
         let rx = OneshotBridge::register_callback(&mut self.inner);
 

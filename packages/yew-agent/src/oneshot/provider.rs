@@ -1,6 +1,7 @@
 use core::fmt;
 use std::any::type_name;
 use std::cell::RefCell;
+use std::future::Future;
 use std::rc::Rc;
 
 use serde::{Deserialize, Serialize};
@@ -88,9 +89,9 @@ where
 #[component]
 pub fn OneshotProvider<T, C = Bincode>(props: &WorkerProviderProps) -> Html
 where
-    T: Oneshot + 'static,
-    T::Input: Serialize + for<'de> Deserialize<'de> + 'static,
-    T::Output: Serialize + for<'de> Deserialize<'de> + 'static,
+    T: Oneshot<Input: Serialize + for<'de> Deserialize<'de> + 'static>
+        + Future<Output: Serialize + for<'de> Deserialize<'de> + 'static>
+        + 'static,
     C: Codec + 'static,
 {
     let WorkerProviderProps {

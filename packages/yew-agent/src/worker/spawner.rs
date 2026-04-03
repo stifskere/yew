@@ -116,8 +116,10 @@ where
     /// Spawns a Worker.
     pub fn spawn(&self, path: &str) -> WorkerBridge<W>
     where
-        W::Input: Serialize + for<'de> Deserialize<'de>,
-        W::Output: Serialize + for<'de> Deserialize<'de>,
+        W: Worker<
+            Input: Serialize + for<'de> Deserialize<'de>,
+            Output: Serialize + for<'de> Deserialize<'de>,
+        >,
     {
         let worker = self.create_worker(path).expect("failed to spawn worker");
 
@@ -163,8 +165,10 @@ where
 
     fn spawn_inner(&self, worker: DedicatedWorker) -> WorkerBridge<W>
     where
-        W::Input: Serialize + for<'de> Deserialize<'de>,
-        W::Output: Serialize + for<'de> Deserialize<'de>,
+        W: Worker<
+            Input: Serialize + for<'de> Deserialize<'de>,
+            Output: Serialize + for<'de> Deserialize<'de>,
+        >,
     {
         let pending_queue = Rc::new(RefCell::new(Some(Vec::new())));
         let handler_id = HandlerId::new();

@@ -49,8 +49,10 @@ where
     pub fn register(&self)
     where
         CODEC: Codec,
-        W::Input: Serialize + for<'de> Deserialize<'de>,
-        W::Output: Serialize + for<'de> Deserialize<'de>,
+        W: Worker<
+            Input: Serialize + for<'de> Deserialize<'de>,
+            Output: Serialize + for<'de> Deserialize<'de>,
+        >,
     {
         let scope = WorkerScope::<W>::new::<CODEC>();
         let upd = WorkerLifecycleEvent::Create(scope.clone());

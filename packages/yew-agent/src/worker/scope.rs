@@ -77,7 +77,7 @@ where
     pub(crate) fn new<CODEC>() -> Self
     where
         CODEC: Codec,
-        W::Output: Serialize + for<'de> Deserialize<'de>,
+        W: Worker<Output: Serialize + for<'de> Deserialize<'de>>,
     {
         let post_msg = move |msg: FromWorker<W>| {
             DedicatedWorker::worker_self().post_packed_message::<_, CODEC>(msg)

@@ -1,4 +1,5 @@
 use std::fmt;
+use std::future::Future;
 
 use serde::de::Deserialize;
 use serde::ser::Serialize;
@@ -53,8 +54,8 @@ where
     /// Registers the worker.
     pub fn register(&self)
     where
-        N::Input: Serialize + for<'de> Deserialize<'de>,
-        N::Output: Serialize + for<'de> Deserialize<'de>,
+        N: Oneshot<Input: Serialize + for<'de> Deserialize<'de>>
+            + Future<Output: Serialize + for<'de> Deserialize<'de>>,
     {
         self.inner.register()
     }

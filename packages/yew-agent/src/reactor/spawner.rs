@@ -66,8 +66,12 @@ where
     /// Spawns a reactor worker.
     pub fn spawn(mut self, path: &str) -> ReactorBridge<R>
     where
-        <R::Scope as ReactorScoped>::Input: Serialize + for<'de> Deserialize<'de>,
-        <R::Scope as ReactorScoped>::Output: Serialize + for<'de> Deserialize<'de>,
+        R: Reactor<
+            Scope: ReactorScoped<
+                Input: Serialize + for<'de> Deserialize<'de>,
+                Output: Serialize + for<'de> Deserialize<'de>,
+            >,
+        >,
     {
         let rx = ReactorBridge::register_callback(&mut self.inner);
 
